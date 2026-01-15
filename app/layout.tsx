@@ -4,7 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { CartProvider } from '@/contexts/CartContext';
 
-const inter = Inter({ subsets: ['latin', 'hebrew'], variable: '--font-inter' });
+const inter = Inter({ subsets: ['latin', 'latin-ext'], variable: '--font-inter' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
 
 export const metadata: Metadata = {
