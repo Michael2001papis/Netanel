@@ -76,9 +76,8 @@ export default function CartPage() {
                       </div>
                       <Button
                         variant="ghost"
-                        className="text-sm"
-                        onClick={() => removeFromCart(item.car.id)}
                         className="text-red-600 hover:text-red-700"
+                        onClick={() => removeFromCart(item.car.id)}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
