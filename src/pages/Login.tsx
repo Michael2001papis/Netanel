@@ -91,14 +91,6 @@ export default function Login() {
               התחבר
             </Button>
           </form>
-          
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-600 text-center">
-              משתמש עסקי: נתנאל / 123456
-              <br />
-              מנהל: MP / 2001
-            </p>
-          </div>
         </Card>
         </motion.div>
       </div>
