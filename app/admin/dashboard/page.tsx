@@ -60,7 +60,11 @@ export default function AdminDashboardPage() {
     });
 
     const topSellingCars = Object.entries(carCounts)
-      .map(([carId, data]) => ({ carId, ...data }))
+      .map(([carId, data]) => ({ 
+        carId, 
+        carName: data.name, 
+        count: data.count 
+      }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
 
