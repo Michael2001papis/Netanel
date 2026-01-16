@@ -2,6 +2,8 @@
 
 אתר מכירת מכוניות יוקרתי עם Showroom ללקוחות ו-Admin Panel להנהלה.
 
+**⚠️ שונה מ-Next.js ל-Vite + React Router**
+
 ## 🚗 מה הפרויקט?
 
 אתר SPA (Single Page Application) לניהול ומכירת מכוניות יוקרתיות. הפרויקט כולל:
@@ -14,8 +16,9 @@
 
 ## 🛠️ טכנולוגיות
 
-- **Next.js 14** - עם App Router
+- **Vite 5** - Build tool מהיר
 - **React 18** - עם TypeScript
+- **React Router 6** - ניתוב SPA
 - **Tailwind CSS** - לעיצוב יוקרתי
 - **Framer Motion** - לאנימציות עדינות
 - **Lucide React** - לאייקונים
@@ -39,16 +42,16 @@ npm install
 npm run dev
 ```
 
-האתר יהיה זמין ב: `http://localhost:3000`
+האתר יהיה זמין ב: `http://localhost:5173`
 
 3. **Build לייצור:**
 ```bash
 npm run build
 ```
 
-4. **הרצה של Build:**
+4. **Preview של Build:**
 ```bash
-npm run start
+npm run preview
 ```
 
 ## 👥 משתמשים
@@ -63,36 +66,9 @@ npm run start
 - **סיסמה:** `2001`
 - **הרשאות:** גישה מלאה לכל המערכת, הנחה עד 25%, איפוס דמו
 
-## 🎯 תכונות עיקריות
-
-### Showroom (עולם הלקוח)
-- ✅ דף בית עם רכבים מומלצים
-- ✅ קטלוג מלא עם חיפוש ופילטרים (מותג, מחיר, רמה, סטטוס)
-- ✅ דף פרטי רכב עם תמונות, מפרט טכני ותוספות
-- ✅ סל קניות עם ניהול תוספות והנחות
-
-### Admin Panel (עולם ההנהלה)
-- ✅ **Dashboard** - סטטיסטיקות מלאות (רכבים בסל, הכנסות, ממוצע מחיר, הנחות היום, רכבים מובילים)
-- ✅ **ניהול רכבים** - הוספה, עריכה, מחיקה של רכבים
-- ✅ **ניהול מחירים** - עריכת מחירי רכבים ותוספות
-- ✅ **ניהול הנחות** - צפייה בהיסטוריית כל ההנחות
-- ✅ **הגדרות מערכת** - עריכת כותרת האתר, טקסטים שיווקיים (למנהל גלובלי בלבד)
-
-### מערכת הנחות
-- ✅ אימות סיסמה (123456)
-- ✅ הגבלות לפי תפקיד:
-  - משתמש עסקי: עד 10%
-  - מנהל גלובלי: עד 25%
-- ✅ לוג הנחות מלא עם תאריך, רכב, אחוז ואישור
-
-### LocalStorage Persistence
-- ✅ כל הנתונים נשמרים ב-LocalStorage
-- ✅ מצב דמו מתקדם
-- ✅ כפתור "איפוס דמו" למנהל גלובלי
-
 ## 🌐 פריסה ל-Vercel
 
-הפרויקט מוכן לפריסה ב-Vercel:
+הפרויקט מוכן לפריסה ב-Vercel עם Vite:
 
 1. **Push ל-GitHub:**
 ```bash
@@ -102,37 +78,41 @@ git push
 2. **חיבור ל-Vercel:**
    - לך ל-[vercel.com](https://vercel.com)
    - חבר את ה-repository שלך
-   - Vercel יזהה אוטומטית Next.js
+   - Vercel יזהה אוטומטית Vite
 
-3. **הגדרות Build:**
-   - Framework Preset: `Next.js`
-   - Build Command: `npm run build`
-   - Output Directory: `Next.js default`
-   - Install Command: `npm install`
+3. **הגדרות Build ב-Vercel:**
+   - **Framework Preset:** `Other` או השאר ריק
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+   - **Install Command:** `npm install`
 
 ## 📁 מבנה הפרויקט
 
 ```
-├── app/                    # Next.js App Router
-│   ├── admin/             # Admin Panel
-│   ├── catalog/           # קטלוג רכבים
-│   ├── cart/              # סל קניות
-│   ├── login/             # התחברות
-│   └── layout.tsx         # Layout ראשי
-├── components/            # רכיבי UI
-│   ├── ui/               # רכיבי UI בסיסיים
-│   └── Navbar.tsx        # Navigation Bar
-├── contexts/             # React Contexts
-│   ├── AuthContext.tsx   # אימות משתמשים
-│   └── CartContext.tsx   # ניהול סל
-├── types/                # TypeScript Types
-├── utils/                # פונקציות עזר
-│   ├── storage.ts        # LocalStorage
-│   └── data.ts           # נתונים ראשוניים
+├── src/
+│   ├── pages/              # דפי האפליקציה
+│   │   ├── Home.tsx
+│   │   ├── Catalog.tsx
+│   │   ├── Cart.tsx
+│   │   └── admin/          # Admin Panel
+│   ├── components/         # רכיבי UI
+│   │   ├── ui/            # רכיבי UI בסיסיים
+│   │   └── Navbar.tsx
+│   ├── contexts/          # React Contexts
+│   │   ├── AuthContext.tsx
+│   │   └── CartContext.tsx
+│   ├── types/             # TypeScript Types
+│   ├── utils/             # פונקציות עזר
+│   │   ├── storage.ts
+│   │   └── data.ts
+│   ├── router.tsx         # React Router configuration
+│   ├── main.tsx           # Entry point
+│   └── index.css          # Global styles
+├── public/                # קבצים סטטיים
+├── index.html            # HTML entry
+├── vite.config.ts        # Vite configuration
 ├── package.json
-├── next.config.js
-├── tailwind.config.js
-└── README.md
+└── tailwind.config.js
 ```
 
 ## 🎨 עיצוב
@@ -151,19 +131,22 @@ git push
 
 אם תרצה להוסיף API בעתיד, צור `.env.local`:
 ```env
-# דוגמה לעתיד
-# NEXT_PUBLIC_API_URL=your_api_url
+VITE_API_URL=your_api_url
 ```
+
+בקוד השתמש ב: `import.meta.env.VITE_API_URL`
 
 ## 🐛 פתרון בעיות
 
-### Build נכשל?
-1. וודא שכל החבילות מותקנות: `npm install`
-2. נקה את ה-cache: `rm -rf .next` (Windows: `Remove-Item -Recurse -Force .next`)
-3. הריץ build מחדש: `npm run build`
+### Build נכשל ב-Vercel?
+1. וודא ש-**Output Directory** ב-Vercel מוגדר ל-`dist`
+2. וודא ש-**Build Command** הוא `npm run build`
+3. בדוק את ה-logs ב-Vercel Dashboard
 
-### בעיות עם Fonts?
-- הפונט Inter לא תומך ב-subset `hebrew`, משתמשים ב-`latin` ו-`latin-ext`
+### Vite לא נמצא?
+```bash
+npm install
+```
 
 ## 📝 רישיון
 
