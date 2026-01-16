@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import { Navbar } from '../components/Navbar';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Card } from '../components/ui/Card';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -12,7 +15,9 @@ export default function Login() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const toast = useToast();
   const navigate = useNavigate();
+  useDocumentTitle('התחברות');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,12 +27,15 @@ export default function Login() {
     try {
       const success = await login(username, password);
       if (success) {
-        navigate('/admin/dashboard');
+        toast.success('התחברת בהצלחה!');
+        setTimeout(() => navigate('/admin/dashboard'), 500);
       } else {
         setError('שם משתמש או סיסמה שגויים');
+        toast.error('שם משתמש או סיסמה שגויים');
       }
     } catch (err) {
       setError('אירעה שגיאה. נסה שוב.');
+      toast.error('אירעה שגיאה. נסה שוב.');
     } finally {
       setIsLoading(false);
     }
@@ -38,7 +46,13 @@ export default function Login() {
       <Navbar />
       
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)] py-12 px-4">
-        <Card className="w-full max-w-md p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
+          <Card className="w-full p-8">
           <h1 className="text-3xl font-bold text-center mb-8 text-gray-900">
             התחברות
           </h1>
@@ -86,6 +100,7 @@ export default function Login() {
             </p>
           </div>
         </Card>
+        </motion.div>
       </div>
     </div>
   );

@@ -5,13 +5,18 @@ import { router } from './router'
 import './index.css'
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
+import { ToastProvider } from './contexts/ToastContext'
+import { SplashScreen } from './components/SplashScreen'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <CartProvider>
-        <RouterProvider router={router} />
-      </CartProvider>
-    </AuthProvider>
+    <ToastProvider>
+      <AuthProvider>
+        <CartProvider>
+          <SplashScreen />
+          <RouterProvider router={router} />
+        </CartProvider>
+      </AuthProvider>
+    </ToastProvider>
   </React.StrictMode>,
 )
