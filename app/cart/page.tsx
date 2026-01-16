@@ -76,7 +76,7 @@ export default function CartPage() {
                       </div>
                       <Button
                         variant="ghost"
-                        size="sm"
+                        className="text-sm"
                         onClick={() => removeFromCart(item.car.id)}
                         className="text-red-600 hover:text-red-700"
                       >
@@ -118,7 +118,7 @@ export default function CartPage() {
                                   password: discountInputs[item.car.id]?.password || '',
                                 },
                               })}
-                              size="sm"
+                              className="text-sm"
                             />
                             <Input
                               type="password"
@@ -131,11 +131,11 @@ export default function CartPage() {
                                   password: e.target.value,
                                 },
                               })}
-                              size="sm"
+                              className="text-sm"
                             />
                             <Button
                               variant="outline"
-                              size="sm"
+                              className="text-sm"
                               onClick={() => handleDiscount(item.car.id)}
                             >
                               החל הנחה
