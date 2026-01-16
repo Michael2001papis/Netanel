@@ -51,10 +51,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isAdmin = user?.role === 'admin';
   const isCEO = isBusiness && user?.username === 'נתנאל';
 
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <AuthContext.Provider
       value={{

@@ -1,6 +1,7 @@
 // נתונים ראשוניים לדמו
 
 import { Car, User, Addon } from '../types';
+import { loadCars, saveCars, loadUsers, saveUsers } from './storage';
 
 // תוספות דיפולטיביות
 export const defaultAddons: Addon[] = [
@@ -209,8 +210,6 @@ export const defaultUsers: User[] = [
 export const initializeData = (): void => {
   if (typeof window === 'undefined') return;
 
-  const { loadCars, saveCars, loadUsers, saveUsers } = require('./storage');
-  
   const cars = loadCars();
   const users = loadUsers();
 
