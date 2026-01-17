@@ -7,7 +7,7 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { loadCars } from '../utils/storage';
 import { Car } from '../types';
-import { Search, Filter, X } from 'lucide-react';
+import { Search, Filter, X, Calendar, Gauge, Zap, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 
 export default function Catalog() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -17,6 +17,7 @@ export default function Catalog() {
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>('default');
 
   useEffect(() => {
     setCars(loadCars());
@@ -37,8 +38,9 @@ export default function Catalog() {
     }
   }, [maxPrice]);
 
-  const filteredCars = useMemo(() => {
-    return cars.filter(car => {
+  const filteredAndSortedCars = useMemo(() => {
+    // סינון רכבים
+    let filtered = cars.filter(car => {
       // חיפוש
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
@@ -67,7 +69,16 @@ export default function Catalog() {
 
       return true;
     });
-  }, [cars, searchTerm, selectedBrand, priceRange, selectedLevel, selectedStatus]);
+
+    // מיון לפי מחיר
+    if (sortBy === 'price-asc') {
+      filtered = [...filtered].sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-desc') {
+      filtered = [...filtered].sort((a, b) => b.price - a.price);
+    }
+
+    return filtered;
+  }, [cars, searchTerm, selectedBrand, priceRange, selectedLevel, selectedStatus, sortBy]);
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -75,9 +86,10 @@ export default function Catalog() {
     setPriceRange([0, maxPrice]);
     setSelectedLevel('');
     setSelectedStatus('');
+    setSortBy('default');
   };
 
-  const hasActiveFilters = searchTerm || selectedBrand || priceRange[0] > 0 || priceRange[1] < maxPrice || selectedLevel || selectedStatus;
+  const hasActiveFilters = searchTerm || selectedBrand || priceRange[0] > 0 || priceRange[1] < maxPrice || selectedLevel || selectedStatus || sortBy !== 'default';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -92,7 +104,7 @@ export default function Catalog() {
 
         {/* Search and Filters */}
         <div className="mb-8 space-y-4">
-          <div className="flex gap-4 flex-wrap">
+          <div className="flex gap-4 flex-wrap items-center">
             <div className="flex-1 min-w-[250px]">
               <div className="relative">
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -104,6 +116,21 @@ export default function Catalog() {
                 />
               </div>
             </div>
+
+            {/* סדר לפי מחיר */}
+            <div className="flex items-center gap-2">
+              <ArrowUpDown className="w-4 h-4 text-gray-400" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as 'default' | 'price-asc' | 'price-desc')}
+                className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-premium-gold min-w-[180px]"
+              >
+                <option value="default">סדר לפי: ברירת מחדל</option>
+                <option value="price-asc">מחיר: נמוך לגבוה</option>
+                <option value="price-desc">מחיר: גבוה לנמוך</option>
+              </select>
+            </div>
+
             <Button
               variant={showFilters ? 'primary' : 'outline'}
               onClick={() => setShowFilters(!showFilters)}
@@ -165,16 +192,24 @@ export default function Catalog() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    טווח מחיר: ₪{priceRange[0].toLocaleString()} - ₪{priceRange[1].toLocaleString()}
+                    טווח מחיר
                   </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max={maxPrice}
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                    className="w-full"
-                  />
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs text-gray-600 mb-2">
+                      <span>₪{priceRange[0].toLocaleString()}</span>
+                      <span>₪{priceRange[1].toLocaleString()}</span>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="range"
+                        min="0"
+                        max={maxPrice}
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-premium-gold"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Card>
@@ -182,59 +217,103 @@ export default function Catalog() {
         </div>
 
         {/* Results Count */}
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <p className="text-gray-600">
-            נמצאו <span className="font-semibold text-gray-900">{filteredCars.length}</span> רכבים
+            נמצאו <span className="font-semibold text-gray-900">{filteredAndSortedCars.length}</span> רכבים
           </p>
+          {hasActiveFilters && (
+            <Button 
+              variant="ghost" 
+              onClick={resetFilters}
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              <X className="w-4 h-4 ml-1" />
+              נקה הכל
+            </Button>
+          )}
         </div>
 
         {/* Cars Grid */}
-        {filteredCars.length > 0 ? (
+        {filteredAndSortedCars.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCars.map((car, index) => (
+            {filteredAndSortedCars.map((car, index) => (
               <motion.div
                 key={car.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
+                className="group"
               >
                 <Link to={`/catalog/${car.id}`}>
-                  <Card hover className="overflow-hidden h-full">
-                  <div className="aspect-video bg-gray-200 relative overflow-hidden">
-                    <img
-                      src={car.images[0] || '/placeholder-car.jpg'}
-                      alt={car.name}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                    />
-                    {car.tags.includes('premium') && (
-                      <span className="absolute top-4 right-4 bg-premium-gold text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        Premium
-                      </span>
-                    )}
-                    {car.tags.includes('new') && (
-                      <span className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        חדש
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold mb-2 text-gray-900">{car.name}</h3>
-                    <p className="text-gray-600 mb-4 text-sm line-clamp-2">{car.description}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-2xl font-bold text-premium-gold">
-                        ₪{car.price.toLocaleString()}
-                      </span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  <Card className="overflow-hidden h-full bg-white border border-gray-200 hover:border-premium-gold/30 hover:shadow-xl transition-all duration-300">
+                    {/* תמונה - אחידות מלאה */}
+                    <div className="aspect-[16/10] bg-gray-100 relative overflow-hidden">
+                      <img
+                        src={car.images[0] || '/placeholder-car.jpg'}
+                        alt={car.name}
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                      />
+                      
+                      {/* Overlay עם "לפרטים" על hover */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <span className="text-white text-lg font-semibold tracking-wide">
+                          לפרטים
+                        </span>
+                      </div>
+
+                      {/* תג Premium עדין (רק אם יש) */}
+                      {car.tags.includes('premium') && (
+                        <span className="absolute top-3 right-3 bg-premium-gold/90 backdrop-blur-sm text-white px-3 py-1 rounded text-xs font-medium">
+                          Premium
+                        </span>
+                      )}
+
+                      {/* סטטוס עדין */}
+                      <span className={`absolute top-3 left-3 px-2.5 py-1 rounded text-xs font-medium backdrop-blur-sm ${
                         car.status === 'in_stock' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
+                          ? 'bg-white/90 text-gray-700' 
+                          : 'bg-gray-800/80 text-white'
                       }`}>
                         {car.status === 'in_stock' ? 'במלאי' : 'אזל'}
                       </span>
                     </div>
-                  </div>
-                </Card>
-              </Link>
+
+                    {/* תוכן כרטיס */}
+                    <div className="p-5">
+                      <h3 className="text-lg font-bold mb-3 text-gray-900 line-clamp-1">
+                        {car.name}
+                      </h3>
+
+                      {/* מידע שימושי: שנה, מנוע, כ"ס */}
+                      <div className="flex flex-wrap gap-3 mb-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-4 h-4 text-gray-400" />
+                          <span>{car.year}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Gauge className="w-4 h-4 text-gray-400" />
+                          <span>{car.specifications.engine}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Zap className="w-4 h-4 text-gray-400" />
+                          <span>{car.specifications.horsepower} כ"ס</span>
+                        </div>
+                      </div>
+
+                      {/* מחיר - זהב עדין ובולט */}
+                      <div className="pt-4 border-t border-gray-100">
+                        <div className="flex items-baseline justify-between">
+                          <span className="text-2xl font-bold text-gray-900">
+                            ₪{car.price.toLocaleString()}
+                          </span>
+                          <span className="text-base font-medium text-premium-gold">
+                            החל מ-
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </div>

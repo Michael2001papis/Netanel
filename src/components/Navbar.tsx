@@ -1,14 +1,15 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/Button';
-import { ShoppingCart, User, LogOut, Settings } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Settings, Phone } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 
 export const Navbar: React.FC = () => {
   const { user, logout, isAuthenticated, isCEO, isAdmin } = useAuth();
   const { cart } = useCart();
   const location = useLocation();
+  const navigate = useNavigate();
   const pathname = location.pathname;
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -55,30 +56,53 @@ export const Navbar: React.FC = () => {
 
   // Showroom Navbar
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-100">
+    <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <Link to="/" className="text-2xl font-bold text-premium-gold">
-            Premium Motors
+          {/* לוגו ברור */}
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-premium-gold rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">PM</span>
+            </div>
+            <span className="text-2xl font-bold text-gray-900">Premium Motors</span>
           </Link>
           
-          <div className="flex items-center gap-6">
+          {/* ניווט קצר */}
+          <div className="hidden md:flex items-center gap-8">
             <Link
               to="/"
-              className={`text-sm font-medium transition-colors ${
-                pathname === '/' ? 'text-premium-gold' : 'text-gray-700 hover:text-premium-gold'
+              className={`text-base font-medium transition-colors ${
+                pathname === '/' ? 'text-premium-gold border-b-2 border-premium-gold pb-1' : 'text-gray-700 hover:text-premium-gold'
               }`}
             >
               בית
             </Link>
             <Link
               to="/catalog"
-              className={`text-sm font-medium transition-colors ${
-                pathname === '/catalog' ? 'text-premium-gold' : 'text-gray-700 hover:text-premium-gold'
+              className={`text-base font-medium transition-colors ${
+                pathname?.startsWith('/catalog') ? 'text-premium-gold border-b-2 border-premium-gold pb-1' : 'text-gray-700 hover:text-premium-gold'
               }`}
             >
-              קטלוג
+              רכבים
             </Link>
+            
+            {/* כפתור "צור קשר" בולט */}
+            <Link
+              to="/"
+              onClick={(e) => {
+                e.preventDefault();
+                const event = new CustomEvent('openContactModal');
+                window.dispatchEvent(event);
+                navigate('/');
+              }}
+            >
+              <Button variant="primary" className="bg-premium-gold hover:bg-premium-gold/90 text-white px-6">
+                <Phone className="w-4 h-4 ml-2" />
+                צור קשר
+              </Button>
+            </Link>
+            
+            {/* סל קניות */}
             <Link
               to="/cart"
               className="relative p-2 text-gray-700 hover:text-premium-gold transition-colors"
