@@ -3,15 +3,11 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '../components/Navbar';
 import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
-import { loadCars } from '../utils/storage';
-import { Car } from '../types';
-import { ArrowLeft, X, ShieldCheck, UserCheck, CreditCard, Eye, Phone } from 'lucide-react';
+import { X, ShieldCheck, UserCheck, CreditCard, Eye, Phone } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 
 export default function Home() {
-  const [featuredCars, setFeaturedCars] = useState<Car[]>([]);
   const [showContactForm, setShowContactForm] = useState(false);
   const [contactName, setContactName] = useState('');
   const [contactPhone, setContactPhone] = useState('');
@@ -19,9 +15,6 @@ export default function Home() {
   const toast = useToast();
 
   useEffect(() => {
-    const cars = loadCars();
-    setFeaturedCars(cars.filter(car => car.level === 'premium').slice(0, 3));
-
     // מאזין לאירוע לפתיחת modal יצירת קשר מה-Navbar
     const handleOpenContact = () => {
       setShowContactForm(true);
@@ -309,74 +302,6 @@ export default function Home() {
           </motion.div>
         </div>
       )}
-
-      {/* Featured Cars */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
-            רכבים מומלצים
-          </h2>
-          
-          {featuredCars.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredCars.map((car, index) => (
-                <motion.div
-                  key={car.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1, duration: 0.6 }}
-                >
-                  <Link to={`/catalog/${car.id}`}>
-                    <Card hover className="overflow-hidden h-full">
-                      <div className="aspect-video bg-gray-200 relative overflow-hidden">
-                        <img
-                          src={car.images[0] || '/placeholder-car.jpg'}
-                          alt={car.name}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                        />
-                        {car.tags.includes('premium') && (
-                          <span className="absolute top-4 right-4 bg-premium-gold text-white px-3 py-1 rounded-full text-xs font-semibold">
-                            Premium
-                          </span>
-                        )}
-                      </div>
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold mb-2 text-gray-900">{car.name}</h3>
-                        <p className="text-gray-600 mb-4 text-sm line-clamp-2">{car.description}</p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-2xl font-bold text-premium-gold">
-                            ₪{car.price.toLocaleString()}
-                          </span>
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            car.status === 'in_stock' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-red-100 text-red-800'
-                          }`}>
-                            {car.status === 'in_stock' ? 'במלאי' : 'אזל'}
-                          </span>
-                        </div>
-                      </div>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-500">אין רכבים זמינים כרגע</p>
-            </div>
-          )}
-
-          <div className="text-center mt-12">
-            <Link to="/catalog">
-              <Button variant="outline" size="lg">
-                צפה בכל הקטלוג
-                <ArrowLeft className="w-5 h-5 mr-2" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white border-t border-gray-800">

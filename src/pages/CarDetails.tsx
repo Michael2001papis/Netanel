@@ -280,52 +280,6 @@ export default function CarDetails() {
               </Button>
             </div>
 
-            {/* תוספות (אם יש) */}
-            {car.addons && car.addons.length > 0 && (
-              <Card className="p-6 mb-6 border border-gray-200">
-                <h2 className="text-xl font-bold mb-4 text-gray-900">תוספות זמינות</h2>
-                <div className="space-y-3">
-                  {car.addons.map((addon) => (
-                    <div
-                      key={addon.id}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        selectedAddons.includes(addon.id)
-                          ? 'border-premium-gold bg-premium-gold/5'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => toggleAddon(addon.id)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            {selectedAddons.includes(addon.id) && (
-                              <Check className="w-5 h-5 text-premium-gold" />
-                            )}
-                            <h3 className="font-semibold text-gray-900">{addon.name}</h3>
-                          </div>
-                          {addon.description && (
-                            <p className="text-sm text-gray-600">{addon.description}</p>
-                          )}
-                          {addon.requiresNote && selectedAddons.includes(addon.id) && (
-                            <Input
-                              placeholder="הזן הערה"
-                              value={customNotes[addon.id] || ''}
-                              onChange={(e) => setCustomNotes({ ...customNotes, [addon.id]: e.target.value })}
-                              className="mt-2"
-                              onClick={(e) => e.stopPropagation()}
-                            />
-                          )}
-                        </div>
-                        <span className="text-lg font-bold text-premium-gold">
-                          ₪{addon.price.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            )}
-
             {/* סיכום מחיר (אם יש תוספות) */}
             {selectedAddons.length > 0 && (
               <Card className="p-6 mb-6 bg-gray-50 border border-gray-200">
