@@ -17,8 +17,6 @@ export const Navbar: React.FC = () => {
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const isAdminRoute = pathname?.startsWith('/admin');
-
   // סגירת תפריט מובייל כשמשנים דף
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -35,46 +33,7 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
-  // במידה ואנחנו ב-Admin Panel, נציג נאב אחר
-  if (isAdminRoute && isAuthenticated) {
-    return (
-      <nav className="bg-admin-dark text-white border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-6">
-              <Link to="/admin/dashboard" className="text-xl font-bold">
-                Admin Panel
-              </Link>
-              {isCEO && (
-                <span className="px-3 py-1 bg-ceo-purple rounded-full text-xs font-semibold">
-                  CEO MODE
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-4">
-              <Link to="/admin/dashboard">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800">
-                  <Settings className="w-4 h-4 ml-2" />
-                  Dashboard
-                </Button>
-              </Link>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={logout}
-                className="text-white hover:bg-gray-800"
-              >
-                <LogOut className="w-4 h-4 ml-2" />
-                יציאה
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
-    );
-  }
-
-  // Showroom Navbar
+  // Navbar אחיד בכל מצב - תמיד Showroom Navbar
   return (
     <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -136,13 +95,19 @@ export const Navbar: React.FC = () => {
                     CEO MODE
                   </span>
                 )}
+                {/* כפתור "פאנל ניהול" - מוצג תמיד אם מחובר, בולט אם נמצא ב-admin */}
                 <Link to="/admin/dashboard">
-                  <Button variant="outline" size="sm">
-                    <User className="w-4 h-4 ml-2" />
+                  <Button 
+                    variant={pathname?.startsWith('/admin') ? 'primary' : 'outline'} 
+                    size="sm"
+                    className={pathname?.startsWith('/admin') ? 'bg-premium-gold hover:bg-premium-gold/90 text-white' : ''}
+                  >
+                    <Settings className="w-4 h-4 ml-2" />
                     פאנל ניהול
                   </Button>
                 </Link>
                 <Button variant="ghost" size="sm" onClick={logout}>
+                  <LogOut className="w-4 h-4 ml-2" />
                   יציאה
                 </Button>
               </div>
