@@ -37,18 +37,27 @@ export const BrandText: React.FC<BrandTextProps> = ({ className = '' }) => {
     setHoveredIndex(index);
     const rect = event.currentTarget.getBoundingClientRect();
     const tooltipWidth = 320; // max-w-xs = 320px
+    
+    // מיקום X - מרכז המילה בדיוק
     let x = rect.left + rect.width / 2;
     
-    // וידוא שהטולטיפ לא יוצא מחוץ למסך
-    if (x < tooltipWidth / 2 + 10) {
-      x = tooltipWidth / 2 + 10;
-    } else if (x > window.innerWidth - tooltipWidth / 2 - 10) {
-      x = window.innerWidth - tooltipWidth / 2 - 10;
+    // וידוא שהטולטיפ לא יוצא מחוץ למסך (עם מרווחי ביטחון)
+    const padding = 16;
+    const minX = tooltipWidth / 2 + padding;
+    const maxX = window.innerWidth - tooltipWidth / 2 - padding;
+    
+    if (x < minX) {
+      x = minX;
+    } else if (x > maxX) {
+      x = maxX;
     }
+    
+    // מיקום Y - מעל המילה, עם חץ ומרווח
+    const y = rect.top;
     
     setTooltipPosition({
       x,
-      y: rect.top - 10,
+      y,
     });
   };
 
@@ -81,9 +90,9 @@ export const BrandText: React.FC<BrandTextProps> = ({ className = '' }) => {
       <AnimatePresence>
         {hoveredIndex !== null && tooltipPosition && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
+            initial={{ opacity: 0, y: 5, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.9 }}
+            exit={{ opacity: 0, y: 5, scale: 0.95 }}
             transition={{
               duration: 0.2,
               ease: 'easeOut',
@@ -92,18 +101,18 @@ export const BrandText: React.FC<BrandTextProps> = ({ className = '' }) => {
             style={{
               left: `${tooltipPosition.x}px`,
               top: `${tooltipPosition.y}px`,
-              transform: 'translate(-50%, -100%)',
+              transform: 'translate(-50%, calc(-100% - 10px))', // מעל המילה עם מרווח של 10px
             }}
           >
-            {/* Tooltip Arrow */}
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
-              <div className="w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-premium-gold"></div>
-            </div>
-
             {/* Tooltip Content */}
             <div className="bg-premium-gold text-white rounded-lg shadow-2xl p-4 max-w-xs text-sm leading-relaxed relative">
               <p className="font-semibold mb-1.5 text-base">{brandTerms[hoveredIndex].word}</p>
               <p className="text-white/90 text-sm">{brandTerms[hoveredIndex].description}</p>
+              
+              {/* Tooltip Arrow - מצביע למטה */}
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px">
+                <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-premium-gold"></div>
+              </div>
             </div>
           </motion.div>
         )}
