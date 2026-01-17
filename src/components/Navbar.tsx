@@ -5,10 +5,12 @@ import { Button } from './ui/Button';
 import { ShoppingCart, User, LogOut, Settings, Phone, Menu, X } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useContactModal } from '../contexts/ContactModalContext';
 
 export const Navbar: React.FC = () => {
   const { user, logout, isAuthenticated, isCEO, isAdmin } = useAuth();
   const { cart } = useCart();
+  const { openModal } = useContactModal();
   const location = useLocation();
   const navigate = useNavigate();
   const pathname = location.pathname;
@@ -105,20 +107,14 @@ export const Navbar: React.FC = () => {
             </Link>
             
             {/* כפתור "צור קשר" בולט */}
-            <Link
-              to="/"
-              onClick={(e) => {
-                e.preventDefault();
-                const event = new CustomEvent('openContactModal');
-                window.dispatchEvent(event);
-                navigate('/');
-              }}
+            <Button 
+              variant="primary" 
+              className="bg-premium-gold hover:bg-premium-gold/90 text-white px-6"
+              onClick={openModal}
             >
-              <Button variant="primary" className="bg-premium-gold hover:bg-premium-gold/90 text-white px-6">
-                <Phone className="w-4 h-4 ml-2" />
-                צור קשר
-              </Button>
-            </Link>
+              <Phone className="w-4 h-4 ml-2" />
+              צור קשר
+            </Button>
             
             {/* סל קניות */}
             <Link
@@ -241,22 +237,18 @@ export const Navbar: React.FC = () => {
                   רכבים
                 </Link>
 
-                <Link
-                  to="/"
-                  onClick={(e) => {
-                    e.preventDefault();
+                <button
+                  onClick={() => {
                     setIsMobileMenuOpen(false);
-                    const event = new CustomEvent('openContactModal');
-                    window.dispatchEvent(event);
-                    navigate('/');
+                    openModal();
                   }}
-                  className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="w-full text-right py-3 px-4 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex items-center gap-2">
                     <Phone className="w-5 h-5 text-premium-gold" />
                     צור קשר
                   </div>
-                </Link>
+                </button>
 
                 <Link
                   to="/cart"

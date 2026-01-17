@@ -28,7 +28,8 @@ export default function Login() {
       const success = await login(username, password);
       if (success) {
         toast.success('התחברת בהצלחה!');
-        setTimeout(() => navigate('/admin/dashboard'), 500);
+        // מעבר מיידי ל-Dashboard - ה-Navbar יתעדכן אוטומטית דרך AuthContext
+        navigate('/admin/dashboard');
       } else {
         setError('שם משתמש או סיסמה שגויים');
         toast.error('שם משתמש או סיסמה שגויים');
