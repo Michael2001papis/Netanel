@@ -7,7 +7,7 @@ import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { loadCars } from '../utils/storage';
 import { Car } from '../types';
-import { ArrowLeft, X, ShieldCheck, UserCheck, CreditCard, Eye } from 'lucide-react';
+import { ArrowLeft, X, ShieldCheck, UserCheck, CreditCard, Eye, Phone } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 
 export default function Home() {
