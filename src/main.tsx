@@ -14,7 +14,10 @@ import { isMaintenanceModeEnabled } from './utils/maintenance'
 import Maintenance from './pages/Maintenance'
 
 // Check maintenance mode before rendering
-const maintenanceEnabled = isMaintenanceModeEnabled();
+// Set to true to enable maintenance mode, false to disable
+const MAINTENANCE_ENABLED = true; // Change to false when ready to go live
+
+const maintenanceEnabled = MAINTENANCE_ENABLED || isMaintenanceModeEnabled();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
