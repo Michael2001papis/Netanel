@@ -81,6 +81,7 @@ export const loadSettings = (): SiteSettings => {
     marketingText: 'יוקרה, ביצועים, חוויה',
     showPrices: true,
     showStockStatus: true,
+    showDiscountsManagement: true, // ברירת מחדל: מוצג
   });
 };
 

@@ -7,7 +7,7 @@ import { useCart } from '../../contexts/CartContext';
 import { Navbar } from '../../components/Navbar';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { loadCars, loadDiscountsLog } from '../../utils/storage';
+import { loadCars, loadDiscountsLog, loadSettings } from '../../utils/storage';
 import { SalesStats } from '../../types';
 import { TrendingUp, DollarSign, ShoppingCart, Percent, BarChart3, Settings, Car } from 'lucide-react';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
@@ -17,6 +17,7 @@ export default function AdminDashboard() {
   const { isAuthenticated, isCEO, isAdmin } = useAuth();
   const { cart } = useCart();
   const [stats, setStats] = useState<SalesStats | null>(null);
+  const [showDiscountsManagement, setShowDiscountsManagement] = useState(true);
   useDocumentTitle();
 
   useEffect(() => {
@@ -24,6 +25,8 @@ export default function AdminDashboard() {
       navigate('/login');
       return;
     }
+    const settings = loadSettings();
+    setShowDiscountsManagement(settings.showDiscountsManagement !== false); // ברירת מחדל: true
     calculateStats();
   }, [isAuthenticated, cart, navigate]);
 
@@ -225,19 +228,22 @@ export default function AdminDashboard() {
             </Card>
           </Link>
 
-          <Link to="/admin/discounts">
-            <Card hover className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                  <Percent className="w-6 h-6 text-purple-500" />
+          {/* כרטיס "ניהול הנחות" - מוצג רק אם ההגדרה מאפשרת */}
+          {showDiscountsManagement && (
+            <Link to="/admin/discounts">
+              <Card hover className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
+                    <Percent className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">ניהול הנחות</h3>
+                    <p className="text-sm text-gray-600">צפה בהיסטוריית הנחות</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-lg">ניהול הנחות</h3>
-                  <p className="text-sm text-gray-600">צפה בהיסטוריית הנחות</p>
-                </div>
-              </div>
-            </Card>
-          </Link>
+              </Card>
+            </Link>
+          )}
 
           {isAdmin && (
             <Link to="/admin/settings">

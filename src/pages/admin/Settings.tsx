@@ -11,29 +11,30 @@ import { SiteSettings } from '../../types';
 
 export default function AdminSettings() {
   const navigate = useNavigate();
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin, isCEO } = useAuth();
   const toast = useToast();
   const [settings, setSettings] = useState<SiteSettings>({
     siteTitle: 'Premium Motors',
     marketingText: 'יוקרה, ביצועים, חוויה',
     showPrices: true,
     showStockStatus: true,
+    showDiscountsManagement: true,
   });
 
   useEffect(() => {
-    if (!isAuthenticated || !isAdmin) {
+    if (!isAuthenticated || (!isAdmin && !isCEO)) {
       navigate('/login');
       return;
     }
     setSettings(loadSettings());
-  }, [isAuthenticated, isAdmin, navigate]);
+  }, [isAuthenticated, isAdmin, isCEO, navigate]);
 
   const handleSave = () => {
     saveSettings(settings);
     toast.success('הגדרות נשמרו בהצלחה!');
   };
 
-  if (!isAuthenticated || !isAdmin) {
+  if (!isAuthenticated || (!isAdmin && !isCEO)) {
     return null;
   }
 
@@ -84,6 +85,37 @@ export default function AdminSettings() {
                 className="w-5 h-5 text-premium-gold rounded focus:ring-premium-gold"
               />
             </div>
+
+            {/* הצגת "ניהול הנחות" - נתנאל יכול רק להפעיל, MP יכול גם להפעיל וגם לבטל */}
+            {(isAdmin || isCEO) && (
+              <div className="flex items-center justify-between border-t border-gray-200 pt-4 mt-4">
+                <div>
+                  <label className="text-sm font-medium">הצגת ניהול הנחות</label>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {isCEO && !isAdmin 
+                      ? 'הצג את הכרטיס "ניהול הנחות" בדף הבית (לא ניתן להסיר)' 
+                      : 'הצג/הסתר את הכרטיס "ניהול הנחות" בדף הבית'}
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={settings.showDiscountsManagement !== false}
+                  onChange={(e) => {
+                    // נתנאל יכול רק להפעיל (לסמן V), לא לבטל
+                    if (isCEO && !isAdmin && !e.target.checked) {
+                      return; // לא מאפשרים לבטל לנתנאל
+                    }
+                    setSettings({ ...settings, showDiscountsManagement: e.target.checked });
+                  }}
+                  disabled={isCEO && !isAdmin && settings.showDiscountsManagement !== false}
+                  className={`w-5 h-5 text-premium-gold rounded focus:ring-premium-gold ${
+                    isCEO && !isAdmin && settings.showDiscountsManagement !== false 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : ''
+                  }`}
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex gap-3 pt-4">

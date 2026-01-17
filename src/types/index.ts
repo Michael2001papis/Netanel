@@ -73,6 +73,7 @@ export interface SiteSettings {
   marketingText: string;
   showPrices: boolean;
   showStockStatus: boolean;
+  showDiscountsManagement?: boolean; // הצגת "ניהול הנחות" ב-Dashboard (ברירת מחדל: true)
 }
 
 // סטטיסטיקות
