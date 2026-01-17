@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -582,6 +583,16 @@ export default function CarDetails() {
           </Card>
         </div>
       )}
+
+      {/* טקסט מותגי */}
+      <div className="text-center py-8 border-t border-gray-200 mt-12">
+        <p className="text-premium-gold text-lg font-medium">
+          ייבוא • מכירה • ליווי אישי • שקיפות מלאה
+        </p>
+      </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/Button';
 import { ShieldCheck, UserCheck, CreditCard, Eye, Phone, ArrowLeft } from 'lucide-react';
 import { useContactModal } from '../contexts/ContactModalContext';
@@ -190,69 +191,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {/* שם העסק */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-premium-gold rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">PM</span>
-                </div>
-                <span className="text-2xl font-bold text-white">Premium Motors</span>
-              </div>
-              <p className="text-gray-400 text-sm">
-                רכבי יוקרה בהתאמה אישית
-              </p>
-            </div>
-
-            {/* טלפון */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-premium-gold">יצירת קשר</h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-gray-300">
-                  <Phone className="w-4 h-4 text-premium-gold" />
-                  <a href="tel:0501234567" className="hover:text-premium-gold transition-colors">
-                    050-123-4567
-                  </a>
-                </div>
-                <div className="flex items-center gap-2 text-gray-300">
-                  <Phone className="w-4 h-4 text-premium-gold" />
-                  <a href="tel:035468899" className="hover:text-premium-gold transition-colors">
-                    03-546-8899
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* שעות פעילות */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-premium-gold">שעות פעילות</h3>
-              <div className="space-y-2 text-gray-300 text-sm">
-                <div className="flex justify-between">
-                  <span>ראשון - חמישי:</span>
-                  <span className="font-medium">09:00 - 19:00</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>שישי:</span>
-                  <span className="font-medium">09:00 - 14:00</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>שבת:</span>
-                  <span className="font-medium text-gray-500">סגור</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* כל הזכויות שמורות */}
-          <div className="border-t border-gray-800 pt-8 text-center">
-            <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Premium Motors. כל הזכויות שמורות.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

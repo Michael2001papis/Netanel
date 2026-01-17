@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import { Card } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
@@ -376,6 +377,16 @@ export default function Catalog() {
           </Card>
         )}
       </div>
+
+      {/* טקסט מותגי */}
+      <div className="text-center py-8 border-t border-gray-200 mt-12">
+        <p className="text-premium-gold text-lg font-medium">
+          ייבוא • מכירה • ליווי אישי • שקיפות מלאה
+        </p>
+      </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
