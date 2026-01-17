@@ -38,26 +38,13 @@ export const Navbar: React.FC = () => {
     <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* לוגו + זכויות יוצרים */}
-          <div className="flex items-center gap-4">
-            <Link to="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
-              <div className="w-10 h-10 bg-premium-gold rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">PM</span>
-              </div>
-              <span className="text-2xl font-bold text-gray-900 hidden sm:inline">Premium Motors</span>
-            </Link>
-            
-            {/* כפתור זכויות יוצרים ליד הלוגו */}
-            <Link
-              to="/copyright"
-              className={`text-xs md:text-sm font-medium transition-colors text-gray-500 hover:text-premium-gold hidden sm:inline ${
-                pathname === '/copyright' ? 'text-premium-gold' : ''
-              }`}
-            >
-              <Copyright className="w-4 h-4 inline ml-1" />
-              זכויות יוצרים
-            </Link>
-          </div>
+          {/* לוגו ברור */}
+          <Link to="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+            <div className="w-10 h-10 bg-premium-gold rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">PM</span>
+            </div>
+            <span className="text-2xl font-bold text-gray-900 hidden sm:inline">Premium Motors</span>
+          </Link>
           
           {/* ניווט קצר - דסקטופ */}
           <div className="hidden md:flex items-center gap-8">
@@ -76,6 +63,15 @@ export const Navbar: React.FC = () => {
               }`}
             >
               רכבים
+            </Link>
+            
+            <Link
+              to="/copyright"
+              className={`text-base font-medium transition-colors ${
+                pathname === '/copyright' ? 'text-premium-gold border-b-2 border-premium-gold pb-1' : 'text-gray-700 hover:text-premium-gold'
+              }`}
+            >
+              זכויות יוצרים
             </Link>
             
             {/* כפתור "צור קשר" בולט */}
