@@ -102,12 +102,12 @@ export const Footer: React.FC = () => {
           </p>
           
           {/* זכויות יוצרים מפתח */}
-          <div className="border-t border-gray-800 pt-4">
-            <p className="text-gray-500 text-xs">
-              פותח על ידי מיכאל פפיסמדוב
+          <div className="border-t border-gray-800 pt-4 mt-4">
+            <p className="text-gray-400 text-xs mb-1">
+              © {new Date().getFullYear()} מיכאל פפיסמדוב. כל הזכויות שמורות.
             </p>
-            <p className="text-gray-600 text-xs mt-1 italic">
-              הגנת זכויות יוצרים טכנית/יצירתית בלבד — ללא קשר לפעילות המסחרית
+            <p className="text-gray-500 text-xs italic">
+              הגנת זכויות יוצרים טכנית/יצירתית בלבד — ללא קשר לפעילות המסחרית של Premium Motors
             </p>
           </div>
         </div>
