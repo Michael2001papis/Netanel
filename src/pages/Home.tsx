@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
+import { BrandText } from '../components/BrandText';
 import { Button } from '../components/ui/Button';
 import { ShieldCheck, UserCheck, CreditCard, Eye, Phone, ArrowLeft } from 'lucide-react';
 import { useContactModal } from '../contexts/ContactModalContext';
@@ -49,14 +50,16 @@ export default function Home() {
             </h2>
           </motion.div>
           
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-lg md:text-xl lg:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto font-light"
+            className="mb-10 max-w-3xl mx-auto"
           >
-            ייבוא • מכירה • ליווי אישי • שקיפות מלאה
-          </motion.p>
+            <div className="text-gray-200">
+              <BrandText className="text-lg md:text-xl lg:text-2xl" />
+            </div>
+          </motion.div>
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}
