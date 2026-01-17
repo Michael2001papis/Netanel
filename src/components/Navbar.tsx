@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/Button';
-import { ShoppingCart, User, LogOut, Settings, Phone, Menu, X } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Settings, Phone, Menu, X, Copyright } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContactModal } from '../contexts/ContactModalContext';
@@ -200,6 +200,21 @@ export const Navbar: React.FC = () => {
                   }`}
                 >
                   רכבים
+                </Link>
+
+                <Link
+                  to="/copyright"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block py-3 px-4 rounded-lg font-medium transition-colors ${
+                    pathname === '/copyright'
+                      ? 'bg-premium-gold/10 text-premium-gold border-r-4 border-premium-gold'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Copyright className="w-5 h-5 text-premium-gold" />
+                    זכויות יוצרים
+                  </div>
                 </Link>
 
                 <button

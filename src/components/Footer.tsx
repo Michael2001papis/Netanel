@@ -96,25 +96,10 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* כל הזכויות שמורות */}
-        <div className="border-t border-gray-800 pt-8 pb-4 text-center space-y-3">
+        <div className="border-t border-gray-800 pt-8 text-center">
           <p className="text-gray-400 text-sm">
             © {new Date().getFullYear()} Premium Motors. כל הזכויות שמורות.
           </p>
-          
-          {/* זכויות יוצרים מפתח */}
-          <div className="border-t border-gray-800 pt-4 mt-4">
-            <Link to="/copyright" className="block group">
-              <p className="text-gray-400 text-xs mb-1 group-hover:text-premium-gold transition-colors">
-                © {new Date().getFullYear()} מיכאל פפיסמדוב. כל הזכויות שמורות.
-              </p>
-              <p className="text-gray-500 text-xs italic group-hover:text-gray-400 transition-colors">
-                הגנת זכויות יוצרים טכנית/יצירתית בלבד — ללא קשר לפעילות המסחרית של Premium Motors
-              </p>
-              <p className="text-premium-gold text-xs mt-2 font-medium underline">
-                למידע נוסף על זכויות יוצרים →
-              </p>
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
