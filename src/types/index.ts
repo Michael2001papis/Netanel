@@ -9,6 +9,13 @@ export interface User {
   name: string;
 }
 
+// הנחה על רכב
+export interface CarDiscount {
+  percentage: number;
+  createdAt: string;
+  createdBy: string; // username של מי שיצר את ההנחה
+}
+
 // רכב
 export interface Car {
   id: string;
@@ -29,6 +36,7 @@ export interface Car {
   tags: ('new' | 'used' | 'first_hand' | 'premium')[];
   level: 'basic' | 'intermediate' | 'premium';
   addons?: Addon[];
+  discount?: CarDiscount; // הנחה על רכב ספציפי
 }
 
 // תוספות

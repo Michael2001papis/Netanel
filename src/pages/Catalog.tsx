@@ -7,7 +7,7 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { loadCars } from '../utils/storage';
 import { Car } from '../types';
-import { Search, Filter, X, Calendar, Gauge, Zap, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, Filter, X, Calendar, Gauge, Zap, ArrowUpDown, ArrowUp, ArrowDown, Percent } from 'lucide-react';
 
 export default function Catalog() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -268,6 +268,14 @@ export default function Catalog() {
                         </span>
                       )}
 
+                      {/* הנחה - בולט על הכרטיס */}
+                      {car.discount && (
+                        <span className="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-bold shadow-lg flex items-center gap-1">
+                          <Percent className="w-4 h-4" />
+                          {car.discount.percentage}% הנחה
+                        </span>
+                      )}
+
                       {/* סטטוס עדין */}
                       <span className={`absolute top-3 left-3 px-2.5 py-1 rounded text-xs font-medium backdrop-blur-sm ${
                         car.status === 'in_stock' 
@@ -302,14 +310,35 @@ export default function Catalog() {
 
                       {/* מחיר - זהב עדין ובולט */}
                       <div className="pt-4 border-t border-gray-100">
-                        <div className="flex items-baseline justify-between">
-                          <span className="text-2xl font-bold text-gray-900">
-                            ₪{car.price.toLocaleString()}
-                          </span>
-                          <span className="text-base font-medium text-premium-gold">
-                            החל מ-
-                          </span>
-                        </div>
+                        {car.discount ? (
+                          <div className="space-y-1">
+                            <div className="flex items-baseline justify-between">
+                              <span className="text-2xl font-bold text-red-500">
+                                ₪{Math.round(car.price * (1 - car.discount.percentage / 100)).toLocaleString()}
+                              </span>
+                              <span className="text-base font-medium text-red-500">
+                                עם הנחה
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-gray-500 line-through">
+                                ₪{car.price.toLocaleString()}
+                              </span>
+                              <span className="text-xs font-semibold text-red-500 bg-red-50 px-2 py-0.5 rounded">
+                                חסכון של {car.discount.percentage}%
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-baseline justify-between">
+                            <span className="text-2xl font-bold text-gray-900">
+                              ₪{car.price.toLocaleString()}
+                            </span>
+                            <span className="text-base font-medium text-premium-gold">
+                              החל מ-
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Card>

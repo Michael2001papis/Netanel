@@ -33,6 +33,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const addToCart = (car: Car, addons: string[] = [], notes: Record<string, string> = {}) => {
     const existingItemIndex = cart.findIndex(item => item.car.id === car.id);
     
+    // אם יש הנחה על הרכב, מעבירים אותה ל-CartItem
+    const discount = car.discount ? {
+      percentage: car.discount.percentage,
+      approvedBy: car.discount.createdBy,
+      approvedAt: car.discount.createdAt,
+    } : undefined;
+    
     if (existingItemIndex >= 0) {
       // עדכון פריט קיים
       const updatedCart = [...cart];
@@ -41,6 +48,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         quantity: updatedCart[existingItemIndex].quantity + 1,
         selectedAddons: [...new Set([...updatedCart[existingItemIndex].selectedAddons, ...addons])],
         customNotes: { ...updatedCart[existingItemIndex].customNotes, ...notes },
+        discount: discount, // עדכון הנחה אם יש
       };
       saveCartToStorage(updatedCart);
     } else {
@@ -50,6 +58,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         quantity: 1,
         selectedAddons: addons,
         customNotes: notes,
+        discount: discount, // הוספת הנחה אם יש
       };
       saveCartToStorage([...cart, newItem]);
     }

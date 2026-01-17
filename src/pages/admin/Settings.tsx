@@ -101,11 +101,13 @@ export default function AdminSettings() {
                   type="checkbox"
                   checked={settings.showDiscountsManagement !== false}
                   onChange={(e) => {
-                    // נתנאל יכול רק להפעיל (לסמן V), לא לבטל
-                    if (isCEO && !isAdmin && !e.target.checked) {
+                    const newValue = e.target.checked;
+                    // נתנאל יכול רק להפעיל (מ-false ל-true), לא לבטל (מ-true ל-false)
+                    if (isCEO && !isAdmin && !newValue && settings.showDiscountsManagement !== false) {
+                      toast.error('נתנאל יכול רק להפעיל את הכרטיס, לא להסיר אותו. רק MP יכול להסיר.');
                       return; // לא מאפשרים לבטל לנתנאל
                     }
-                    setSettings({ ...settings, showDiscountsManagement: e.target.checked });
+                    setSettings({ ...settings, showDiscountsManagement: newValue });
                   }}
                   disabled={isCEO && !isAdmin && settings.showDiscountsManagement !== false}
                   className={`w-5 h-5 text-premium-gold rounded focus:ring-premium-gold ${

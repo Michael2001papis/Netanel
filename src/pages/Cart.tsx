@@ -11,23 +11,9 @@ import { Trash2, ShoppingCart, ArrowLeft } from 'lucide-react';
 
 export default function Cart() {
   const navigate = useNavigate();
-  const { cart, removeFromCart, updateCartItem, clearCart, getCartTotal, getCartItemTotal, applyDiscount } = useCart();
+  const { cart, removeFromCart, updateCartItem, clearCart, getCartTotal, getCartItemTotal } = useCart();
   const { isBusiness, isAdmin } = useAuth();
   const toast = useToast();
-  const [discountInputs, setDiscountInputs] = useState<Record<string, { percentage: number; password: string }>>({});
-
-  const handleDiscount = async (carId: string) => {
-    const input = discountInputs[carId];
-    if (!input) return;
-
-    const success = await applyDiscount(carId, input.percentage, input.password);
-    if (success) {
-      setDiscountInputs({ ...discountInputs, [carId]: { percentage: 0, password: '' } });
-      toast.success('הנחה הוחלה בהצלחה!');
-    } else {
-      toast.error('שגיאה בהחלת הנחה. בדוק את הסיסמה או את הגבלת ההנחה.');
-    }
-  };
 
   if (cart.length === 0) {
     return (
@@ -99,57 +85,21 @@ export default function Cart() {
                       </div>
                     )}
 
-                    {/* הנחה */}
-                    {(isBusiness || isAdmin) && (
-                      <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                        {!item.discount ? (
-                          <div className="space-y-2">
-                            <Input
-                              type="number"
-                              placeholder="אחוז הנחה"
-                              min="0"
-                              max={isAdmin ? 25 : 10}
-                              value={discountInputs[item.car.id]?.percentage || ''}
-                              onChange={(e) => setDiscountInputs({
-                                ...discountInputs,
-                                [item.car.id]: {
-                                  percentage: parseInt(e.target.value) || 0,
-                                  password: discountInputs[item.car.id]?.password || '',
-                                },
-                              })}
-                              className="text-sm"
-                            />
-                            <Input
-                              type="password"
-                              placeholder="סיסמת מנהל"
-                              value={discountInputs[item.car.id]?.password || ''}
-                              onChange={(e) => setDiscountInputs({
-                                ...discountInputs,
-                                [item.car.id]: {
-                                  percentage: discountInputs[item.car.id]?.percentage || 0,
-                                  password: e.target.value,
-                                },
-                              })}
-                              className="text-sm"
-                            />
-                            <Button
-                              variant="outline"
-                              className="text-sm"
-                              onClick={() => handleDiscount(item.car.id)}
-                            >
-                              החל הנחה
-                            </Button>
-                          </div>
-                        ) : (
-                          <div className="text-sm">
-                            <p className="font-semibold text-green-600">
-                              הנחה {item.discount.percentage}% מוחלת
-                            </p>
-                            <p className="text-gray-500 text-xs">
-                              אושר על ידי: {item.discount.approvedBy}
-                            </p>
-                          </div>
-                        )}
+                    {/* הנחה - מוצגת רק אם יש הנחה על הרכב */}
+                    {item.car.discount && (
+                      <div className="mt-4 p-3 bg-red-50 rounded-lg border border-red-200">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-lg font-bold text-red-600">
+                            {item.car.discount.percentage}% הנחה
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            על הרכב
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-600">
+                          הוגדרה ב-{new Date(item.car.discount.createdAt).toLocaleDateString('he-IL')}
+                          {item.car.discount.createdBy && ` על ידי ${item.car.discount.createdBy}`}
+                        </p>
                       </div>
                     )}
 
