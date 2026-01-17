@@ -16,6 +16,7 @@ export default function Catalog() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [selectedDiscount, setSelectedDiscount] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>('default');
 
@@ -67,6 +68,12 @@ export default function Catalog() {
         if (selectedStatus === 'out_of_stock' && car.status !== 'out_of_stock') return false;
       }
 
+      // הנחה
+      if (selectedDiscount) {
+        if (selectedDiscount === 'with_discount' && !car.discount) return false;
+        if (selectedDiscount === 'without_discount' && car.discount) return false;
+      }
+
       return true;
     });
 
@@ -78,7 +85,7 @@ export default function Catalog() {
     }
 
     return filtered;
-  }, [cars, searchTerm, selectedBrand, priceRange, selectedLevel, selectedStatus, sortBy]);
+  }, [cars, searchTerm, selectedBrand, priceRange, selectedLevel, selectedStatus, selectedDiscount, sortBy]);
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -86,10 +93,11 @@ export default function Catalog() {
     setPriceRange([0, maxPrice]);
     setSelectedLevel('');
     setSelectedStatus('');
+    setSelectedDiscount('');
     setSortBy('default');
   };
 
-  const hasActiveFilters = searchTerm || selectedBrand || priceRange[0] > 0 || priceRange[1] < maxPrice || selectedLevel || selectedStatus || sortBy !== 'default';
+  const hasActiveFilters = searchTerm || selectedBrand || priceRange[0] > 0 || priceRange[1] < maxPrice || selectedLevel || selectedStatus || selectedDiscount || sortBy !== 'default';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -187,6 +195,19 @@ export default function Catalog() {
                     <option value="">הכל</option>
                     <option value="in_stock">במלאי</option>
                     <option value="out_of_stock">אזל</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">הנחה</label>
+                  <select
+                    value={selectedDiscount}
+                    onChange={(e) => setSelectedDiscount(e.target.value)}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-premium-gold"
+                  >
+                    <option value="">הכל</option>
+                    <option value="with_discount">עם הנחה</option>
+                    <option value="without_discount">ללא הנחה</option>
                   </select>
                 </div>
 
