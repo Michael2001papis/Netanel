@@ -4,16 +4,20 @@ import { Navbar } from '../components/Navbar';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { PaymentSuccess } from '../components/PaymentSuccess';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
-import { Trash2, ShoppingCart, ArrowLeft } from 'lucide-react';
+import { Trash2, ShoppingCart, ArrowLeft, CreditCard, Lock } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Cart() {
   const navigate = useNavigate();
   const { cart, removeFromCart, updateCartItem, clearCart, getCartTotal, getCartItemTotal } = useCart();
   const { isBusiness, isAdmin } = useAuth();
   const toast = useToast();
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   if (cart.length === 0) {
     return (
@@ -54,15 +58,15 @@ export default function Cart() {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="text-xl font-bold">{item.car.name}</h3>
-                        <p className="text-gray-600 text-sm">₪{item.car.price.toLocaleString()}</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-start mb-2 gap-4 min-w-0">
+                      <div className="min-w-0 flex-shrink">
+                        <h3 className="text-xl font-bold truncate min-w-0">{item.car.name}</h3>
+                        <p className="text-gray-600 text-sm truncate min-w-0">₪{item.car.price.toLocaleString()}</p>
                       </div>
                       <Button
                         variant="ghost"
-                        className="text-red-600 hover:text-red-700"
+                        className="text-red-600 hover:text-red-700 flex-shrink-0"
                         onClick={() => removeFromCart(item.car.id)}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -103,9 +107,9 @@ export default function Cart() {
                       </div>
                     )}
 
-                    <div className="mt-4 flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <label className="text-sm">כמות:</label>
+                    <div className="mt-4 flex justify-between items-center gap-4 min-w-0">
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <label className="text-sm whitespace-nowrap">כמות:</label>
                         <input
                           type="number"
                           min="1"
@@ -116,7 +120,7 @@ export default function Cart() {
                           className="w-16 px-2 py-1 border border-gray-300 rounded text-center"
                         />
                       </div>
-                      <span className="text-xl font-bold text-premium-gold">
+                      <span className="text-xl font-bold text-premium-gold truncate min-w-0 text-left whitespace-nowrap">
                         ₪{getCartItemTotal(item).toLocaleString()}
                       </span>
                     </div>
@@ -131,15 +135,15 @@ export default function Cart() {
             <Card className="p-6 sticky top-8">
               <h2 className="text-2xl font-bold mb-6">סיכום הזמנה</h2>
               
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between">
-                  <span>מספר פריטים</span>
-                  <span>{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+              <div className="space-y-3 mb-6 min-w-0">
+                <div className="flex justify-between gap-4 min-w-0">
+                  <span className="flex-shrink-0">מספר פריטים</span>
+                  <span className="truncate min-w-0 text-left">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
                 </div>
-                <div className="border-t border-gray-300 pt-3">
-                  <div className="flex justify-between text-xl font-bold">
-                    <span>סה"כ</span>
-                    <span className="text-premium-gold">₪{getCartTotal().toLocaleString()}</span>
+                <div className="border-t border-gray-300 pt-3 min-w-0">
+                  <div className="flex justify-between gap-4 text-xl font-bold min-w-0">
+                    <span className="flex-shrink-0">סה"כ</span>
+                    <span className="text-premium-gold truncate min-w-0 text-left whitespace-nowrap">₪{getCartTotal().toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -147,14 +151,35 @@ export default function Cart() {
               <Button
                 variant="primary"
                 size="lg"
-                className="w-full mb-3"
-                onClick={() => {
-                  toast.success('הזמנה בוצעה בהצלחה! (דמו)');
-                  clearCart();
-                  setTimeout(() => navigate('/'), 500);
+                className="w-full mb-3 bg-premium-gold hover:bg-premium-gold/90 text-white relative overflow-hidden"
+                onClick={async () => {
+                  setIsProcessing(true);
+                  // סימולציית תהליך תשלום
+                  await new Promise(resolve => setTimeout(resolve, 1500));
+                  setIsProcessing(false);
+                  setShowPaymentSuccess(true);
                 }}
+                disabled={isProcessing}
               >
-                המשך לתשלום
+                {isProcessing ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                    />
+                    <span>מעבד תשלום...</span>
+                  </motion.div>
+                ) : (
+                  <>
+                    <Lock className="w-5 h-5 ml-2" />
+                    המשך לתשלום
+                  </>
+                )}
               </Button>
 
               <Button
@@ -169,6 +194,18 @@ export default function Cart() {
           </div>
         </div>
       </div>
+
+      {/* Payment Success Modal */}
+      <PaymentSuccess
+        isOpen={showPaymentSuccess}
+        onClose={() => {
+          setShowPaymentSuccess(false);
+          clearCart();
+          setTimeout(() => navigate('/'), 300);
+        }}
+        totalAmount={getCartTotal()}
+        itemsCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
+      />
     </div>
   );
 }

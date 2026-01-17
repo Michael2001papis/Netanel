@@ -172,13 +172,13 @@ export default function CarDetails() {
               
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{car.name}</h1>
               
-              {/* אזור מחיר ברור */}
-              <div className="bg-gradient-to-r from-premium-gold/10 to-transparent border-r-4 border-premium-gold p-5 rounded-lg mb-6">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-gray-900">
+              {/* אזור מחיר ברור - עם overflow protection */}
+              <div className="bg-gradient-to-r from-premium-gold/10 to-transparent border-r-4 border-premium-gold p-5 rounded-lg mb-6 min-w-0">
+                <div className="flex items-baseline gap-2 min-w-0">
+                  <span className="text-4xl font-bold text-gray-900 truncate min-w-0 flex-shrink">
                     ₪{car.price.toLocaleString()}
                   </span>
-                  <span className="text-lg font-medium text-premium-gold">החל מ-</span>
+                  <span className="text-lg font-medium text-premium-gold whitespace-nowrap flex-shrink-0">החל מ-</span>
                 </div>
                 <p className="text-sm text-gray-600 mt-2">מחיר בסיס, לפני תוספות</p>
               </div>
@@ -226,16 +226,16 @@ export default function CarDetails() {
                       }`}
                       onClick={() => toggleAddon(addon.id)}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
+                      <div className="flex items-center justify-between gap-4 min-w-0">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             {selectedAddons.includes(addon.id) && (
-                              <Check className="w-5 h-5 text-premium-gold" />
+                              <Check className="w-5 h-5 text-premium-gold flex-shrink-0" />
                             )}
-                            <h3 className="font-semibold">{addon.name}</h3>
+                            <h3 className="font-semibold truncate min-w-0">{addon.name}</h3>
                           </div>
                           {addon.description && (
-                            <p className="text-sm text-gray-600">{addon.description}</p>
+                            <p className="text-sm text-gray-600 line-clamp-2">{addon.description}</p>
                           )}
                           {addon.requiresNote && selectedAddons.includes(addon.id) && (
                             <Input
@@ -246,7 +246,7 @@ export default function CarDetails() {
                             />
                           )}
                         </div>
-                        <span className="text-lg font-bold text-premium-gold">
+                        <span className="text-lg font-bold text-premium-gold whitespace-nowrap flex-shrink-0">
                           ₪{addon.price.toLocaleString()}
                         </span>
                       </div>
@@ -280,27 +280,27 @@ export default function CarDetails() {
               </Button>
             </div>
 
-            {/* סיכום מחיר (אם יש תוספות) */}
+            {/* סיכום מחיר (אם יש תוספות) - עם overflow protection */}
             {selectedAddons.length > 0 && (
-              <Card className="p-6 mb-6 bg-gray-50 border border-gray-200">
+              <Card className="p-6 mb-6 bg-gray-50 border border-gray-200 min-w-0">
                 <h3 className="text-lg font-bold mb-4 text-gray-900">סיכום מחיר</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-gray-700">
-                    <span>מחיר בסיס</span>
-                    <span className="font-medium">₪{car.price.toLocaleString()}</span>
+                <div className="space-y-2 min-w-0">
+                  <div className="flex justify-between gap-4 text-gray-700 min-w-0">
+                    <span className="flex-shrink-0">מחיר בסיס</span>
+                    <span className="font-medium truncate min-w-0 text-left">₪{car.price.toLocaleString()}</span>
                   </div>
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>תוספות ({selectedAddons.length})</span>
-                    <span>
+                  <div className="flex justify-between gap-4 text-sm text-gray-600 min-w-0">
+                    <span className="flex-shrink-0">תוספות ({selectedAddons.length})</span>
+                    <span className="truncate min-w-0 text-left">
                       ₪{selectedAddons.reduce((sum, id) => {
                         const addon = car.addons?.find(a => a.id === id);
                         return sum + (addon?.price || 0);
                       }, 0).toLocaleString()}
                     </span>
                   </div>
-                  <div className="border-t border-gray-300 pt-3 mt-3 flex justify-between text-xl font-bold">
-                    <span className="text-gray-900">סה"כ</span>
-                    <span className="text-premium-gold">₪{getTotalPrice().toLocaleString()}</span>
+                  <div className="border-t border-gray-300 pt-3 mt-3 flex justify-between gap-4 text-xl font-bold min-w-0">
+                    <span className="text-gray-900 flex-shrink-0">סה"כ</span>
+                    <span className="text-premium-gold truncate min-w-0 text-left">₪{getTotalPrice().toLocaleString()}</span>
                   </div>
                 </div>
               </Card>

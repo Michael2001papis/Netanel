@@ -329,33 +329,33 @@ export default function Catalog() {
                         </div>
                       </div>
 
-                      {/* מחיר - זהב עדין ובולט */}
-                      <div className="pt-4 border-t border-gray-100">
+                      {/* מחיר - זהב עדין ובולט - עם overflow protection */}
+                      <div className="pt-4 border-t border-gray-100 min-w-0">
                         {car.discount ? (
                           <div className="space-y-1">
-                            <div className="flex items-baseline justify-between">
-                              <span className="text-2xl font-bold text-red-500">
+                            <div className="flex items-baseline justify-between gap-2 min-w-0">
+                              <span className="text-2xl font-bold text-red-500 truncate min-w-0 flex-shrink">
                                 ₪{Math.round(car.price * (1 - car.discount.percentage / 100)).toLocaleString()}
                               </span>
-                              <span className="text-base font-medium text-red-500">
+                              <span className="text-base font-medium text-red-500 whitespace-nowrap flex-shrink-0">
                                 עם הנחה
                               </span>
                             </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm text-gray-500 line-through">
+                            <div className="flex items-center justify-between gap-2 min-w-0">
+                              <span className="text-sm text-gray-500 line-through truncate min-w-0 flex-shrink">
                                 ₪{car.price.toLocaleString()}
                               </span>
-                              <span className="text-xs font-semibold text-red-500 bg-red-50 px-2 py-0.5 rounded">
+                              <span className="text-xs font-semibold text-red-500 bg-red-50 px-2 py-0.5 rounded whitespace-nowrap flex-shrink-0">
                                 חסכון של {car.discount.percentage}%
                               </span>
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-baseline justify-between">
-                            <span className="text-2xl font-bold text-gray-900">
+                          <div className="flex items-baseline justify-between gap-2 min-w-0">
+                            <span className="text-2xl font-bold text-gray-900 truncate min-w-0 flex-shrink">
                               ₪{car.price.toLocaleString()}
                             </span>
-                            <span className="text-base font-medium text-premium-gold">
+                            <span className="text-base font-medium text-premium-gold whitespace-nowrap flex-shrink-0">
                               החל מ-
                             </span>
                           </div>
