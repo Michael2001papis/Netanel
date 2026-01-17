@@ -84,28 +84,32 @@ export const Footer: React.FC = () => {
           {/* שעות פעילות */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-premium-gold">שעות פעילות</h3>
-            <div className="space-y-2 text-gray-300 text-sm">
-              <div className="flex justify-between">
-                <span>ראשון - חמישי:</span>
-                <span className="font-medium">09:00 - 19:00</span>
-              </div>
-              <div className="flex justify-between">
-                <span>שישי:</span>
-                <span className="font-medium">09:00 - 14:00</span>
-              </div>
-              <div className="flex justify-between">
-                <span>שבת:</span>
-                <span className="font-medium text-gray-500">סגור</span>
-              </div>
+            <div className="text-gray-300 text-sm">
+              <p className="font-medium text-gray-400 italic">
+                סגור זמנית
+              </p>
+              <p className="text-xs text-gray-500 mt-2">
+                עד לעדכון נוסף
+              </p>
             </div>
           </div>
         </div>
 
         {/* כל הזכויות שמורות */}
-        <div className="border-t border-gray-800 pt-8 text-center">
+        <div className="border-t border-gray-800 pt-8 pb-4 text-center space-y-3">
           <p className="text-gray-400 text-sm">
             © {new Date().getFullYear()} Premium Motors. כל הזכויות שמורות.
           </p>
+          
+          {/* זכויות יוצרים מפתח */}
+          <div className="border-t border-gray-800 pt-4">
+            <p className="text-gray-500 text-xs">
+              פותח על ידי מיכאל פפיסמדוב
+            </p>
+            <p className="text-gray-600 text-xs mt-1 italic">
+              הגנת זכויות יוצרים טכנית/יצירתית בלבד — ללא קשר לפעילות המסחרית
+            </p>
+          </div>
         </div>
       </div>
     </footer>

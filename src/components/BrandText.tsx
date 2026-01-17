@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 
 interface BrandTerm {
   word: string;
@@ -30,93 +30,62 @@ interface BrandTextProps {
 }
 
 export const BrandText: React.FC<BrandTextProps> = ({ className = '' }) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
-
-  const handleMouseEnter = (index: number, event: React.MouseEvent<HTMLSpanElement>) => {
-    setHoveredIndex(index);
-    const rect = event.currentTarget.getBoundingClientRect();
-    const tooltipWidth = 320; // max-w-xs = 320px
-    
-    // מיקום X - מרכז המילה בדיוק
-    let x = rect.left + rect.width / 2;
-    
-    // וידוא שהטולטיפ לא יוצא מחוץ למסך (עם מרווחי ביטחון)
-    const padding = 16;
-    const minX = tooltipWidth / 2 + padding;
-    const maxX = window.innerWidth - tooltipWidth / 2 - padding;
-    
-    if (x < minX) {
-      x = minX;
-    } else if (x > maxX) {
-      x = maxX;
-    }
-    
-    // מיקום Y - מעל המילה, עם חץ ומרווח
-    const y = rect.top;
-    
-    setTooltipPosition({
-      x,
-      y,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredIndex(null);
-    setTooltipPosition(null);
-  };
-
   return (
     <div className={`relative ${className}`}>
-      <p className="text-premium-gold text-lg font-medium text-center">
-        {brandTerms.map((term, index) => (
-          <React.Fragment key={term.word}>
-            <motion.span
-              onMouseEnter={(e) => handleMouseEnter(index, e)}
-              onMouseLeave={handleMouseLeave}
-              className="relative cursor-help inline-block px-1 transition-colors duration-200 hover:text-premium-gold/80"
-              whileHover={{ scale: 1.05 }}
-            >
-              {term.word}
-            </motion.span>
-            {index < brandTerms.length - 1 && (
-              <span className="mx-2 text-premium-gold/60">•</span>
-            )}
-          </React.Fragment>
-        ))}
-      </p>
+      {/* טקסט מותגי עם קישור לאלמנט */}
+      <div className="text-center mb-8">
+        <p className="text-premium-gold text-lg font-medium">
+          {brandTerms.map((term, index) => (
+            <React.Fragment key={term.word}>
+              <span>{term.word}</span>
+              {index < brandTerms.length - 1 && (
+                <span className="mx-2 text-premium-gold/60">•</span>
+              )}
+            </React.Fragment>
+          ))}
+        </p>
+      </div>
 
-      {/* Tooltip */}
-      <AnimatePresence>
-        {hoveredIndex !== null && tooltipPosition && (
-          <motion.div
-            initial={{ opacity: 0, y: 5, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 5, scale: 0.95 }}
-            transition={{
-              duration: 0.2,
-              ease: 'easeOut',
-            }}
-            className="fixed z-[9999] pointer-events-none"
-            style={{
-              left: `${tooltipPosition.x}px`,
-              top: `${tooltipPosition.y}px`,
-              transform: 'translate(-50%, calc(-100% - 10px))', // מעל המילה עם מרווח של 10px
-            }}
-          >
-            {/* Tooltip Content */}
-            <div className="bg-premium-gold text-white rounded-lg shadow-2xl p-4 max-w-xs text-sm leading-relaxed relative">
-              <p className="font-semibold mb-1.5 text-base">{brandTerms[hoveredIndex].word}</p>
-              <p className="text-white/90 text-sm">{brandTerms[hoveredIndex].description}</p>
-              
-              {/* Tooltip Arrow - מצביע למטה */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px">
-                <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-transparent border-t-premium-gold"></div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* עיגול מעוצב עם הסברים */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="relative max-w-4xl mx-auto"
+      >
+        {/* עיגול חיצוני עם gradient */}
+        <div className="relative bg-gradient-to-br from-premium-gold/10 via-premium-gold/5 to-transparent rounded-3xl p-8 md:p-12 border border-premium-gold/20 shadow-xl">
+          {/* רשת של 2x2 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {brandTerms.map((term, index) => (
+              <motion.div
+                key={term.word}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="text-center md:text-right space-y-2"
+              >
+                {/* כותרת */}
+                <h3 className="text-xl md:text-2xl font-bold text-premium-gold mb-2">
+                  {term.word}
+                </h3>
+                {/* תיאור */}
+                <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                  {term.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* קווי הפרדה אלגנטיים */}
+          <div className="hidden md:block absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-0 right-0 h-px bg-premium-gold/10 transform -translate-y-1/2"></div>
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-premium-gold/10 transform -translate-x-1/2"></div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
