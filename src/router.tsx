@@ -4,6 +4,7 @@ import Catalog from './pages/Catalog'
 import CarDetails from './pages/CarDetails'
 import Cart from './pages/Cart'
 import Login from './pages/Login'
+import Copyright from './pages/Copyright'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminCars from './pages/admin/Cars'
 import AdminNewCar from './pages/admin/NewCar'
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/copyright',
+    element: <Copyright />,
   },
   {
     path: '/admin/dashboard',
