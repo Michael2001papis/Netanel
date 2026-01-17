@@ -10,21 +10,30 @@ import { ToastProvider } from './contexts/ToastContext'
 import { ContactModalProvider } from './contexts/ContactModalContext'
 import { SplashScreen } from './components/SplashScreen'
 import { ContactModal } from './components/ContactModal'
+import { isMaintenanceModeEnabled } from './utils/maintenance'
+import Maintenance from './pages/Maintenance'
+
+// Check maintenance mode before rendering
+const maintenanceEnabled = isMaintenanceModeEnabled();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ConsentProvider>
-      <ToastProvider>
-        <AuthProvider>
-          <CartProvider>
-            <ContactModalProvider>
-              <SplashScreen />
-              <RouterProvider router={router} />
-              <ContactModal />
-            </ContactModalProvider>
-          </CartProvider>
-        </AuthProvider>
-      </ToastProvider>
-    </ConsentProvider>
+    {maintenanceEnabled ? (
+      <Maintenance />
+    ) : (
+      <ConsentProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <CartProvider>
+              <ContactModalProvider>
+                <SplashScreen />
+                <RouterProvider router={router} />
+                <ContactModal />
+              </ContactModalProvider>
+            </CartProvider>
+          </AuthProvider>
+        </ToastProvider>
+      </ConsentProvider>
+    )}
   </React.StrictMode>,
 )
