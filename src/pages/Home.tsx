@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Navbar } from '../components/Navbar';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { X, ShieldCheck, UserCheck, CreditCard, Eye, Phone } from 'lucide-react';
+import { X, ShieldCheck, UserCheck, CreditCard, Eye, Phone, ArrowLeft } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 
 export default function Home() {
