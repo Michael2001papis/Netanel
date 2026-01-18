@@ -15,7 +15,7 @@ import Maintenance from './pages/Maintenance'
 
 // Check maintenance mode before rendering
 // Set to true to enable maintenance mode, false to disable
-const MAINTENANCE_ENABLED = true; // Change to false when ready to go live
+const MAINTENANCE_ENABLED = false; // Change to false when ready to go live
 
 const maintenanceEnabled = MAINTENANCE_ENABLED || isMaintenanceModeEnabled();
 
